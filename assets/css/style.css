@@ -59,6 +59,71 @@ body{
     }
 }
 
+.confirm-delete{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 9;
+    display: none;
+}
+.confirm-delete.active{
+    display: flex;
+    align-items: center;
+
+}
+.modal{
+    background-color: #fff;
+    padding: 30px 30px;
+    border-radius: 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 400px;
+    z-index: 999;
+    margin: 0 auto;
+    /* height: 300px; */
+    animation: inFade .4s linear;
+    /* margin-top: 100px; */
+}
+.modal .title-confirm h2{
+    font-weight: 500;
+}
+
+.modal .title-confirm p{
+    padding: 20px 0;
+}
+.modal .btn-confirm{
+    display: flex;
+    justify-content: center;
+}
+.modal .btn-confirm .btn-detail{
+    padding: 10px 20px;
+    margin: 0 10px;
+    text-decoration: none;
+    border-radius: 15px;
+}
+.modal .btn-confirm .cancel{
+    background-color: #ddd;
+    color: #333;
+}
+
+.modal .btn-confirm .delete{
+    background-color: red;
+    color: #fff;
+}
+
+@keyframes inFade{
+    from{
+        opacity: 0;
+        transform: scale(0);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .title-form{
     display: flex;
     align-items: center;
