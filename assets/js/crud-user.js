@@ -85,7 +85,6 @@ const STATE_USER = {
         document.getElementById('title-add').style.display = 'none';
         document.getElementById('title-update').style.display = 'block';   
     },  
-
     //Xử lý form 
     handleFormSubmit: function() {
         var lastName = document.getElementById('lastName').value;
@@ -106,6 +105,7 @@ const STATE_USER = {
             this.editUser(index, user);  
         }
     },
+    // Reset form
     resetForm: function() {
         document.getElementById('lastName').value = "";
         document.getElementById('firstName').value = "";
@@ -119,6 +119,7 @@ const STATE_USER = {
         document.getElementById('update').style.display = 'none';
         document.getElementById('user-index').value = "";
     },
+    //Search
     searchUsers: function(query) {
         const lowerQuery = query.toLowerCase();
         const filteredUsers = this.state_users.filter(user => {
@@ -133,8 +134,7 @@ const STATE_USER = {
         });
         return filteredUsers;
     },
-
-    // Hàm sắp xếp tăng dần
+    // Tăng dần
     sortUp: function(key) {
         this.state_users.sort((a, b) => {
             if (a[key] < b[key]) return -1;
@@ -143,8 +143,7 @@ const STATE_USER = {
         });
         this.renderUserList()   
     },
-
-    // Hàm sắp xếp giảm dần
+    // Giảm dần
     sortDown: function(key) {
         this.state_users.sort((a, b) => {
             if (a[key] > b[key]) return -1;
@@ -153,7 +152,6 @@ const STATE_USER = {
         });
         this.renderUserList();  
     },
-
 };
 
 //Sự kiện
@@ -212,6 +210,7 @@ function listenSort() {
         });
     });
 }
+
 function getUsers() {
     return STATE_USER.users;
 }
