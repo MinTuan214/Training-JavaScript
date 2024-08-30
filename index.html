@@ -61,8 +61,9 @@
                     </div>
                     <div class="hr"></div> 
                     <div class="box-btn">
+                        <input type="hidden" id="user-index">
                         <button type="submit" class="save" name="save" id="save">Save</button>
-                        <button type="button" class="update" name="update" id="update">Update</button>
+                        <button type="submit" class="update" name="update" id="update">Update</button>
                         <button type="reset" class="reset" name="reset" id="reset">Reset</button>
                     </div>
                 </form>
@@ -77,20 +78,20 @@
                 </div>
                 <div class="btn-confirm">
                     <a href="#" class="btn-detail cancel">Cancel</a>
-                    <a href="#" class="btn-detail delete" onclick="deleteUser()">Delete</a>
+                    <a href="#" class="btn-detail delete">Delete</a>
                 </div>
             </div>
         </div>
         <!-- Table -->
         <div class="box-table">
             <div class="inline-top">
-                <div class="title-form">
+                <div class="title-form"
                     <h2>List Users</h2>
                     <a href="#" class="btn-add">+ Add</a>
                 </div>
                 <div class="search">
-                    <input type="text" name="search" placeholder="Search...">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" name="search" placeholder="Search..." id="searchUsers">
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
                 
             </div>
@@ -99,11 +100,20 @@
             <table border="1" id="list-users">
                 <thead>
                     <tr>          
-                        <th>Name <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-key="firstName">
+                            <p class="title-th">Name</p> 
+                            <span class="sort"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span>
+                        </th>
                         <th>Email </th>
                         <th>Address</th>
-                        <th>City <i class="fa-solid fa-sort"></i></th>
-                        <th>Country <i class="fa-solid fa-sort"></i></th>
+                        <th class="sortable" data-key="city">
+                            <p class="title-th">City</p> 
+                            <span class="sort"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span>
+                        </th>
+                        <th class="sortable" data-key="country">
+                            <p class="title-th">Country</p> 
+                            <span class="sort"><i class="fa-solid fa-sort-up"></i><i class="fa-solid fa-sort-down"></i></span>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -114,16 +124,14 @@
 
             <div class="quantity-item">
                 <div class="entries">
-                    Showing <span>5</span> out of <span>25</span> entries
+                    <!-- Showing <span>5</span> out of <span>25</span> entries -->
                 </div>
                 <div class="pagination">
-                    <span class="active">1</span>
+                    <!-- <span class="active">1</span>
                     <span>2</span>
                     <span>3</span>
-                    <div class="btns">
-                        <div class="btn prev"><<</div>
-                        <div class="btn next">>></div>
-                    </div>
+                -->
+                  
                 </div>
             </div>
         </div>

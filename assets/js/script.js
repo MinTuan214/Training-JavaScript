@@ -6,11 +6,6 @@ var btnUpdate = document.querySelectorAll('.btn-update');
     add.addEventListener('click', function(){
         overflow.classList.add('active');
     });
-    btnUpdate.forEach(element => {
-        element.addEventListener('click', function(){
-            overflow.classList.add('active');
-        });
-    });
     
     closeModal.addEventListener('click', function(){
         overflow.classList.remove('active');

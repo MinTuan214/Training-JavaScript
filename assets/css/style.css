@@ -249,8 +249,8 @@ input{
 }
 .inline-top i{
     position: absolute;
-    left: 17px;
-    top: 10px;
+    left: 13px;
+    top: 13px;
     cursor: pointer;
 }
 
@@ -259,14 +259,20 @@ input{
     width: 100%;
     border-color: #ddd;
 }
-.box-table table tr th{
+.box-table table thead tr th{
     font-weight: 500;
     padding: 10px 10px;
+    position: relative;
+    max-width: 100%;
+    width: 180px;
 }
 
 .box-table table tr td{
     padding: 10px 10px;
     color: #333;
+    max-width: 100%;
+    width: 180px;
+
 }
 .quantity-item{
     display: flex;
@@ -333,4 +339,18 @@ i{
     cursor: pointer;
 }
 
-
+.sort{
+    right: 20px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 10px;
+}
+.sort{
+    font-size: 12px;
+    cursor: pointer;
+    color: #ddd;
+}
+.active-i{
+    color: #333;
+}
