@@ -1,48 +1,127 @@
-// "use strict";
+"use strict";
+
+const load = document.querySelector('.page_loader');
+function showLoader() {
+    load.classList.remove('hidden');
+}
+function hideLoader() {
+    load.classList.add('hidden');
+}
+function alwayLoad() {
+    showLoader(); 
+    window.onload = hideLoader(); 
+}
+alwayLoad()
 
 const STATE_USER = {
     state_users: [],
 
-    // Lấy dữ liệu từ LocalStorage
-    loadUsersFromLocalStorage: function(){
-        const storedUsers = localStorage.getItem('STATE_USE');
-        this.state_users = storedUsers ? JSON.parse(storedUsers) : [];
+    //Load dữ liệu từ API
+    loadUsersFromAPI: function(){
+        showLoader()
+        fetch('https://cae4b723474a87611103.free.beeceptor.com/api/users12/')
+            .then(response => {
+                if(!response.ok){
+                    throw new Error('không ổn');
+                }else{
+                    return response.json();
+                }
+            })
+            .then(data => {
+                this.state_users = data
+                this.renderUserList();
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                hideLoader();
+            })
     },
-
     // Khởi tạo dữ liệu từ LocalStorage
     init: function(){
-        this.loadUsersFromLocalStorage();
-        this.renderUserList();
-    },
-
-    // lưu danh sách dữ liệu vào LocalStorage
-    saveUsers: function(){
-        localStorage.setItem('STATE_USE', JSON.stringify(this.state_users));
-    },
-
-    //Thêm User
-    addUser: function(user){
-        this.state_users.unshift(user);
-        this.saveUsers();
-        this.renderUserList();
-        
-    },
-
-    //Sửa User
-    editUser: function(id, updateUser){
-        this.state_users[id] = updateUser;
-        this.saveUsers();
-        this.renderUserList();
-    },
-
-    //Xóa User
-    deleteUser: function(id){
-        this.state_users.splice(id, 1);
-        this.saveUsers();
-        this.renderUserList();
+        this.loadUsersFromAPI();
         pagination()
     },
-    
+    // lưu danh sách dữ liệu vào LocalStorage
+    // saveUsers: function(){
+    //     localStorage.setItem('STATE_USE', JSON.stringify(this.state_users));
+    // },
+    //Thêm User
+    addUser: function(user) {
+        showLoader()
+        fetch('https://cae4b723474a87611103.free.beeceptor.com/api/users14/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Lỗi nhé')
+            }
+            return response.json()
+        })
+        .then(data => {
+            this.state_users.unshift(data)
+            this.renderUserList();
+        })
+        .catch(error => {
+            console.error('Có lỗi khi thêm user:', error)
+        })
+        .finally(() => {
+            hideLoader();
+        })
+    },
+    //Sửa User
+    editUser: function(id, updateUser){
+        showLoader();
+        fetch(`https://cae4b723474a87611103.free.beeceptor.com/api/users14/${id}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateUser)
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error("Lỗi cập nhật");
+            }
+            return response.json();
+        })
+        .then(() => {
+            this.loadUsersFromAPI();
+            modal();
+        })
+        .catch(error => {
+            console.log("Đã xảy ra lỗi", error);
+        })
+        .finally(() => {
+            hideLoader();
+        })
+    },
+    //Xóa User
+    deleteUser: function(id){
+        showLoader();
+        fetch(`https://cae4b723474a87611103.free.beeceptor.com/api/users14/${id}`,{
+            method: 'DELETE',
+        })
+        .then(response => {
+            if(!response.ok) {
+                throw new Error("Lỗi xóa");       
+            }
+            this.state_users = this.state_users.filter(user => user.id !== id);
+            this.renderUserList();
+
+        })
+        .catch(error => {
+            console.log("Lỗi", error);     
+        })
+        .finally(() => {
+            hideLoader();
+        })
+    },
     // Hiển thị danh sách người dùng
     renderUserList: function(){
         const userListContainer = document.querySelector('#list-users tbody');
@@ -64,10 +143,9 @@ const STATE_USER = {
                 `;
             });
             listenDeleteUser();
-            listenUpdateUser();
             pagination();
+            modal();
     },
-    
     //form edit
     editUserForm: function(index){
         const user = this.state_users[index];
@@ -100,10 +178,12 @@ const STATE_USER = {
         if (index === '') {
             this.addUser(user); 
             this.resetForm();
-            
+            modal();
         } else {
-            this.editUser(index, user);  
+            const id = this.state_users[index].id;    
+            this.editUser(id, user);
         }
+
     },
     // Reset form
     resetForm: function() {
@@ -154,6 +234,45 @@ const STATE_USER = {
     },
 };
 
+//Modal
+function modal(){
+    var add = document.querySelector('.btn-add');
+    var formAdd = document.querySelector('.form-add');
+    var closeModal = document.querySelector('.close-modal');
+    var overflow = document.querySelector('.overflow');
+    const btnUpdate = document.querySelectorAll('.btn-update');
+    add.addEventListener('click', function(){
+        overflow.classList.add('active');
+        document.getElementById('save').style.display = 'block';
+        document.getElementById('update').style.display = 'none';
+        document.getElementById('title-add').style.display = 'block';
+        document.getElementById('title-update').style.display = 'none';
+        STATE_USER.resetForm();
+    });
+    closeModal.addEventListener('click', function(){
+        overflow.classList.remove('active');
+    });
+    overflow.addEventListener('click', function(){
+        overflow.classList.remove('active');
+    });
+    formAdd.addEventListener('click', function(e){
+        e.stopPropagation();
+    });
+    btnUpdate.forEach(function(item){
+        item.addEventListener('click', function(){
+            const index = this.getAttribute('data-edit');
+            STATE_USER.editUserForm(index); 
+        })
+    });  
+    btnUpdate.forEach(element => {
+        element.addEventListener('click', function(){
+            overflow.classList.add('active');
+        });
+    });
+    
+
+}
+
 //Sự kiện
 function listenNewUser(){
     var form = document.getElementById('save');
@@ -167,29 +286,20 @@ function listenNewUser(){
         STATE_USER.handleFormSubmit();
     });
 }
+
 function listenDeleteUser(){
     const btnDelete = document.querySelectorAll('.btn-delete');
     btnDelete.forEach(function(item){
         item.addEventListener('click', function(){
             const index = this.getAttribute('data-index');
-            STATE_USER.deleteUser(index);        
+            const id = STATE_USER.state_users[index].id;
+            if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
+                STATE_USER.deleteUser(id);
+            }
         })
     });  
 }
-function listenUpdateUser(){
-    const btnUpdate = document.querySelectorAll('.btn-update');
-    btnUpdate.forEach(function(item){
-        item.addEventListener('click', function(){
-            const index = this.getAttribute('data-edit');
-            STATE_USER.editUserForm(index); 
-        })
-    });  
-    btnUpdate.forEach(element => {
-        element.addEventListener('click', function(){
-            overflow.classList.add('active');
-        });
-    });
-}
+
 function listenSort() {
     var sortColumns = document.querySelectorAll('.sortable');
     sortColumns.forEach(column =>{
@@ -211,18 +321,13 @@ function listenSort() {
     });
 }
 
-function getUsers() {
-    return STATE_USER.users;
-}
-function createUser(data){
-    STATE_USER.addUser(data);
-}
 // Pagination
 function pagination(){
     let thisPage = 1;
     const limit = 5;
     const listItem = document.querySelectorAll('tbody tr');
     function loadItem(){
+        showLoader();
         const benginGet = limit * (thisPage - 1);
         const endGet = limit * thisPage - 1;
         listItem.forEach((item, key) =>{
@@ -233,6 +338,9 @@ function pagination(){
             }
         });
         listPage();
+        setTimeout(() => {
+            hideLoader();
+        }, 500); 
     }
     loadItem()
     function listPage(){
@@ -257,7 +365,7 @@ function pagination(){
             });
             document.querySelector('.pagination').appendChild(newPage);
         }
-        if(thisPage != count){
+        if(1 < thisPage != count){
             let next = document.createElement('span');
             next.innerHTML = '>>';
             next.addEventListener('click', function(){
@@ -266,18 +374,18 @@ function pagination(){
             document.querySelector('.pagination').appendChild(next);
         }
     }
+
     function changePage(i){
         thisPage = i;
         loadItem();
     }
-
 }
+
 // Search
 function searchUsers() {
     const searchInput = document.querySelector('#searchUsers');
     const btnSearch = document.querySelector('.search button');
     btnSearch.addEventListener('click', function() {
-        STATE_USER.loadUsersFromLocalStorage();  
         const query = searchInput.value.trim();
         if(query === ''){
             STATE_USER.init(); 
@@ -288,22 +396,23 @@ function searchUsers() {
             pagination(); 
         } 
     });     
+    return STATE_USER.loadUsersFromAPI();  
 }
 
 function listUsers(){
     STATE_USER.renderUserList();
     listenDeleteUser();
-    listenUpdateUser();
+    modal();
     pagination();
     searchUsers();
     listenSort();
 }
-
 
 //Hàm chạy chính
 function main() {
     STATE_USER.init();
     listenNewUser();
     listUsers();
+    modal();
 }
 main();
