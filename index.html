@@ -9,10 +9,6 @@
 </head>
 <body>
     <!-- form -->
-    <div class="page_loader">
-        <img src="assets/images/loader.svg" alt="img">
-      </div>
-      
     <div class="container">
         <div class="overflow">
             <div class="form-add">
@@ -65,15 +61,41 @@
                     <div class="hr"></div> 
                     <div class="box-btn">
                         <input type="hidden" id="user-index">
-                        <button type="submit" class="save" name="save" id="save">Save</button>
-                        <button type="submit" class="update" name="update" id="update">Update</button>
+                        <div class="box-load">
+                            <button type="submit" class="save" name="save" id="save">
+                                <span class="text-save">Save</span>
+                                <div class="loader-save hidden">
+                                    <svg 
+                                        width="20px" height="20px" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                                        <path class="opacity-75"
+                                        fill="currentColor" 
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>                            
+                                </div>  
+                            </button>
+                          
+                        </div>
+                        
+                        <button type="submit" class="update" name="update" id="update">
+                            <span class="text-save">Update</span>
+                            <div class="loader-save hidden">
+                                <svg 
+                                    width="20px" height="20px" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                                    <path class="opacity-75"
+                                    fill="currentColor" 
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>                            
+                            </div>  
+                        </button>
                         <button type="reset" class="reset" name="reset" id="reset">Reset</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div class="confirm-delete">
+        <!-- <div class="confirm-delete">
             <div class="modal">
                 <div class="title-confirm">
                     <h2>Delete Confirmation</h2>
@@ -84,11 +106,11 @@
                     <a href="#" class="btn-detail delete">Delete</a>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Table -->
         <div class="box-table">
             <div class="inline-top">
-                <div class="title-form"
+                <div class="title-form">
                     <h2>List Users</h2>
                     <a href="#" class="btn-add">+ Add</a>
                 </div>
@@ -120,8 +142,16 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    
+                <tbody class="tbody">
+                    <div class="loader-table">
+                        <svg 
+                            width="20px" height="20px" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                            <path class="opacity-75"
+                            fill="currentColor" 
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>                            
+                    </div> 
                 </tbody>
             </table>
 

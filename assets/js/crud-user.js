@@ -1,25 +1,12 @@
 "use strict";
 
-const load = document.querySelector('.page_loader');
-function showLoader() {
-    load.classList.remove('hidden');
-}
-function hideLoader() {
-    load.classList.add('hidden');
-}
-function alwayLoad() {
-    showLoader(); 
-    window.onload = hideLoader(); 
-}
-alwayLoad()
-
 const STATE_USER = {
     state_users: [],
-
     //Load dữ liệu từ API
     loadUsersFromAPI: function(){
-        showLoader()
-        fetch('https://cae4b723474a87611103.free.beeceptor.com/api/users12/')
+        const btnLoadTable = document.querySelector('.loader-table');
+        btnLoadTable.classList.remove('hidden');
+        fetch('https://caca136b7071fe8a5605.free.beeceptor.com/api/users16161616/')
             .then(response => {
                 if(!response.ok){
                     throw new Error('không ổn');
@@ -35,22 +22,34 @@ const STATE_USER = {
                 console.log(error);
             })
             .finally(() => {
-                hideLoader();
-            })
+                btnLoadTable.classList.add('hidden');
+            });
     },
-    // Khởi tạo dữ liệu từ LocalStorage
     init: function(){
         this.loadUsersFromAPI();
+        this.state_users;
         pagination()
     },
-    // lưu danh sách dữ liệu vào LocalStorage
-    // saveUsers: function(){
-    //     localStorage.setItem('STATE_USE', JSON.stringify(this.state_users));
-    // },
+
     //Thêm User
     addUser: function(user) {
-        showLoader()
-        fetch('https://cae4b723474a87611103.free.beeceptor.com/api/users14/', {
+        const save = document.querySelector('.save');
+        const textLoad = save.querySelector('.text-save');
+        const btnLoad = save.querySelector('.loader-save');
+
+        function showLoader() {
+            textLoad.classList.add('hidden');
+            btnLoad.classList.remove('hidden');
+        }
+
+        function hideLoader() {
+            textLoad.classList.remove('hidden');
+            btnLoad.classList.add('hidden');
+        }
+
+        showLoader();    
+
+        fetch('https://caca136b7071fe8a5605.free.beeceptor.com/api/users16161616/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +58,7 @@ const STATE_USER = {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Lỗi nhé')
+                throw new Error('Lỗi khi thêm nhé')
             }
             return response.json()
         })
@@ -72,13 +71,28 @@ const STATE_USER = {
         })
         .finally(() => {
             hideLoader();
-        })
+        });
+       
     },
     //Sửa User
     editUser: function(id, updateUser){
-        showLoader();
-        fetch(`https://cae4b723474a87611103.free.beeceptor.com/api/users14/${id}`,{
-            method: 'PUT',
+        const update = document.querySelector('.update');
+        const textLoad = update.querySelector('.text-save');
+        const btnLoad = update.querySelector('.loader-save');
+
+        function showLoader() {
+            textLoad.classList.add('hidden');
+            btnLoad.classList.remove('hidden');
+        }
+
+        function hideLoader() {
+            textLoad.classList.remove('hidden');
+            btnLoad.classList.add('hidden');
+        }
+
+        showLoader(); 
+        fetch(`https://caca136b7071fe8a5605.free.beeceptor.com/api/users16161616/${id}`,{
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -99,29 +113,46 @@ const STATE_USER = {
         })
         .finally(() => {
             hideLoader();
-        })
+        });
+       
+     
     },
     //Xóa User
-    deleteUser: function(id){
+    deleteUser: function(id, index){
+        const btnDelete = document.querySelectorAll('.btn-delete')[index];
+        const textDelete = btnDelete.querySelector('.text-delete');
+        const loaderDelete = btnDelete.querySelector('.loader-delete');
+
+        function showLoader() {
+            textDelete.classList.add('hidden');
+            loaderDelete.classList.remove('hidden');
+        }
+
+        function hideLoader() {
+            textDelete.classList.remove('hidden');
+            loaderDelete.classList.add('hidden');
+        }
+
         showLoader();
-        fetch(`https://cae4b723474a87611103.free.beeceptor.com/api/users14/${id}`,{
-            method: 'DELETE',
+
+        fetch(`https://caca136b7071fe8a5605.free.beeceptor.com/api/users16161616/${id}`, {
+            method: 'DELETE'
         })
         .then(response => {
             if(!response.ok) {
-                throw new Error("Lỗi xóa");       
+                throw new Error("Lỗi xóa");
             }
             this.state_users = this.state_users.filter(user => user.id !== id);
             this.renderUserList();
-
         })
         .catch(error => {
-            console.log("Lỗi", error);     
+            console.log("Lỗi:", error);
         })
         .finally(() => {
-            hideLoader();
-        })
+            hideLoader()
+        });
     },
+
     // Hiển thị danh sách người dùng
     renderUserList: function(){
         const userListContainer = document.querySelector('#list-users tbody');
@@ -136,8 +167,22 @@ const STATE_USER = {
                         <td>${user.country}</td>
                         <td class="action">
                             <a href="${index}"><i class="fa-regular fa-eye"></i></a> |
-                            <button class="btn-update" data-edit="${index}"><i class="fa-regular fa-pen-to-square"></i></button> |
-                            <button class="btn-delete" data-index="${index}"><i class="fa-regular fa-trash-can"></i></button>
+                            <button class="btn-update" data-edit="${index}">
+                                <span class="text-save"><i class="fa-regular fa-pen-to-square"></i></span>
+                             
+                            </button> |
+                            <button class="btn-delete" data-index="${index}">
+                            <span class="text-delete"><i class="fa-regular fa-trash-can"></i></span>
+                                <div class="loader-delete hidden">
+                                    <svg 
+                                        width="20px" height="20px" class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                                        <path class="opacity-75"
+                                        fill="currentColor" 
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                        </path>
+                                    </svg>                            
+                                </div> 
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -269,8 +314,6 @@ function modal(){
             overflow.classList.add('active');
         });
     });
-    
-
 }
 
 //Sự kiện
@@ -289,16 +332,14 @@ function listenNewUser(){
 
 function listenDeleteUser(){
     const btnDelete = document.querySelectorAll('.btn-delete');
-    btnDelete.forEach(function(item){
+    btnDelete.forEach(function(item, index){
         item.addEventListener('click', function(){
-            const index = this.getAttribute('data-index');
             const id = STATE_USER.state_users[index].id;
-            if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
-                STATE_USER.deleteUser(id);
-            }
-        })
-    });  
+            STATE_USER.deleteUser(id, index);
+        });
+    });
 }
+
 
 function listenSort() {
     var sortColumns = document.querySelectorAll('.sortable');
@@ -327,7 +368,6 @@ function pagination(){
     const limit = 5;
     const listItem = document.querySelectorAll('tbody tr');
     function loadItem(){
-        showLoader();
         const benginGet = limit * (thisPage - 1);
         const endGet = limit * thisPage - 1;
         listItem.forEach((item, key) =>{
@@ -338,9 +378,6 @@ function pagination(){
             }
         });
         listPage();
-        setTimeout(() => {
-            hideLoader();
-        }, 500); 
     }
     loadItem()
     function listPage(){
@@ -365,7 +402,7 @@ function pagination(){
             });
             document.querySelector('.pagination').appendChild(newPage);
         }
-        if(1 < thisPage != count){
+        if(thisPage != count){
             let next = document.createElement('span');
             next.innerHTML = '>>';
             next.addEventListener('click', function(){
@@ -374,7 +411,6 @@ function pagination(){
             document.querySelector('.pagination').appendChild(next);
         }
     }
-
     function changePage(i){
         thisPage = i;
         loadItem();
@@ -396,7 +432,6 @@ function searchUsers() {
             pagination(); 
         } 
     });     
-    return STATE_USER.loadUsersFromAPI();  
 }
 
 function listUsers(){

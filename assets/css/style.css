@@ -190,6 +190,9 @@ body{
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 600;
+    position: relative;
+    /* height: 40px;
+    width: 50px; */
 }
 .box-btn .update{
     background-color: green;
@@ -200,6 +203,7 @@ body{
     text-transform: uppercase;
     font-weight: 600;
     display: none;
+    position: relative;
 }
 
 .box-btn .reset{
@@ -355,16 +359,73 @@ i{
     color: #333;
 }
 
-.page_loader{
-    position: fixed;
-    z-index: 9999;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.box-load{
+    position: relative;
 }
+
+.loader-save{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+.loader-save svg{
+    animation: spin .5s linear infinite;
+    color: #d1d4d9;
+
+}
+.loader-save svg circle{
+    color: #5b616e;
+}
+
 .hidden{
-    display: none;
+    opacity: 0;
+    z-index: -1;
+}
+
+.btn-delete{
+    position: relative;
+}
+
+.loader-delete{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+.loader-delete svg{
+    animation: spin .5s linear infinite;
+    color: #d1d4d9;
+
+}
+.loader-delete svg circle{
+    color: #5b616e;
+}
+
+.tbody{
+    position: relative;
+}
+
+.loader-table{
+    position: absolute;
+    top: 78%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+.loader-table svg{
+    animation: spin .5s linear infinite;
+    color: #d1d4d9;
+
+}
+.loader-table svg circle{
+    color: #5b616e;
+}
+
+@keyframes spin{
+    to{
+        transform: rotate(1turn);
+    }
 }
