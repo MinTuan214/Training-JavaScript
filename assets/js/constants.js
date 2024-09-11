@@ -1,3 +1,3 @@
-const USERS_ENDPOINT = `https://cae4a43f6c4f96e9ee3d.free.beeceptor.com/api/userstest2/`;
+const USERS_ENDPOINT = `https://ca40f88e089136cc674b.free.beeceptor.com/api/usershhghf/`;
 
 export { USERS_ENDPOINT }

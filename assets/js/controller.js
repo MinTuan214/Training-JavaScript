@@ -1,11 +1,11 @@
 import { STATE_USER } from './state.js';
 import { userServices } from './services.js';
-import { utils } from './utils.js';
 
 const userController = {
     async init() {
-        await userServices.loadUser();
+        await userServices.getUser();
         this.render();
+        this.listenEvent();
     },
     async addUser(user) {
         await userServices.addUser(user);
@@ -17,23 +17,23 @@ const userController = {
     },
     async deleteUser(id) {
         await userServices.deleteUser(id);
-        STATE_USER.deleteUserInState(id);
+        userServices.deleteUserInState(id);
         this.render();
     },
     render() {
-        STATE_USER.renderUserList(STATE_USER.state_users);
+        userServices.renderUserList(STATE_USER.state_users);
         this.listenDelete();
     },
     sortUp(key){
-        STATE_USER.sortUsersUp(key);
+        userServices.sortUsersUp(key);
         this.render();
     },
     sortDown(key){
-        STATE_USER.sortUsersDown(key);
+        userServices.sortUsersDown(key);
         this.render();
     },
     handleFormSubmit() {
-        const {lastName, firstName, email, phone, country, city, address ,index} = utils.containForm();
+        const {lastName, firstName, email, phone, country, city, address ,index} = this.containForm();
         const user = {lastName, firstName, email, phone, country, city, address ,index};
         if (index === '') {
             this.addUser(user);
@@ -73,10 +73,10 @@ const userController = {
             if (query === '') {
                 userController.init();
             } else {
-                const filteredUsers = STATE_USER.searchUsers(query);
+                const filteredUsers = userServices.searchUsers(query);
                 STATE_USER.state_users = filteredUsers;
-                STATE_USER.renderUserList(STATE_USER.state_users);
-                STATE_USER.pagination();
+                userServices.renderUserList(STATE_USER.state_users);
+                userServices.pagination();
             }
         });
     },
@@ -100,12 +100,41 @@ const userController = {
             });
         });
     },
+    modal() {
+        var add = document.querySelector('.btn-add');
+        var formAdd = document.querySelector('.form-add');
+        var closeModal = document.querySelector('.close-modal');
+        var overflow = document.querySelector('.overflow');
+        add.addEventListener('click', function () {
+            overflow.classList.add('active');
+        });
+        closeModal.addEventListener('click', function () {
+            overflow.classList.remove('active');
+        });
+        overflow.addEventListener('click', function () {
+            overflow.classList.remove('active');
+        });
+        formAdd.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    }, 
+    containForm(){
+        var lastName = document.getElementById('lastName').value;
+        var firstName = document.getElementById('firstName').value;
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('phone').value;
+        var country = document.getElementById('country').value;
+        var city = document.getElementById('city').value;
+        var address = document.getElementById('address').value;
+        var index = document.getElementById('user-index').value;
+        return { lastName, firstName, email, phone, country, city, address, index};
+    },
     listenEvent(){
         this.listenDelete();
         this.listenSort();
         this.listenNewUser();
         this.searchUsers();
-        utils.modal();
+        this.modal();
     }
 
 };

@@ -1,7 +1,7 @@
 import { USERS_ENDPOINT } from "./constants.js";
 
 const API = {
-    loadUsers: async () =>{
+    getUsers: async () =>{
         const response = await fetch(USERS_ENDPOINT);
         if(!response.ok) throw new Error('Xảy ra lỗi khi load dữ liệu từ API');
         return response.json();
