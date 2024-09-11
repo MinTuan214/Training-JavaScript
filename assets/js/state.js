@@ -128,24 +128,6 @@ const STATE_USER = {
                 loadItem();
             }
         },
-        
-        // Search
-        searchUsers() {
-            const searchInput = document.querySelector('#searchUsers');
-            const btnSearch = document.querySelector('.search button');
-            btnSearch.addEventListener('click', function () {
-                const query = searchInput.value.trim();
-                if (query === '') {
-                    STATE_USER.init();
-                } else {
-                    const filteredUsers = STATE_USER.searchUsers(query);
-                    STATE_USER.state_users = filteredUsers;
-                    STATE_USER.renderUserList();
-                    pagination();
-                }
-            });
-        }
- 
 };
 
 export { STATE_USER };
